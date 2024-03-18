@@ -1,0 +1,59 @@
+import tkinter as tk
+from tkinter import messagebox
+
+class TodoListtask(tk.Tk):
+    def __init__(x):
+        super().__init__()
+        x.title("To-Do List")
+        x.geometry("300x300")
+        x.create_widgets()
+
+    def create_widgets(x):
+        x.entry = tk.Entry(x, width=30)
+        x.entry.pack(pady=10) 
+
+        x.add_button = tk.Button(x, text="Add Task", command=x.add)
+        x.add_button.pack(side=tk.LEFT, padx=5)
+
+        x.remove_button = tk.Button(x, text="Remove Task", command=x.remove)
+        x.remove_button.pack(side=tk.LEFT, padx=5)
+
+        x.toggle_button = tk.Button(x, text="Toggle Completion", command=x.toggle_completion)
+        x.toggle_button.pack(side=tk.LEFT, padx=5)
+
+        x.clear_button = tk.Button(x, text="Clear All Tasks", command=x.clear_all)
+        x.clear_button.pack(side=tk.LEFT, padx=5)
+
+        x.listbox = tk.Listbox(x, selectmode=tk.SINGLE)
+        x.listbox.pack(pady=10)
+
+    def add(x):
+        work = x.entry.get()
+        if work:
+            x.listbox.insert(tk.END, (work, False)) 
+            x.entry.delete(0, tk.END)
+        else:
+            messagebox.showwarning("Warning", "Please enter a task.")
+
+    def remove(x):
+        selected_work_index = x.listbox.curselection()
+        if selected_work_index:
+            x.listbox.delete(selected_work_index)
+        else:
+            messagebox.showwarning("Warning", "Please select a task to remove.")
+
+    def toggle_completion(x):
+        selected_work_index = x.listbox.curselection()
+        if selected_work_index:
+            work, completed = x.listbox.get(selected_work_index[0])
+            x.listbox.delete(selected_work_index)
+            x.listbox.insert(selected_work_index[0], (work, not completed))
+        else:
+            messagebox.showwarning("Warning", "Please select a task to mark as completed.")
+
+    def clear_all(x):
+        x.listbox.delete(0, tk.END)
+
+if __name__ == "__main__":
+    app = TodoListtask()
+    app.mainloop()
